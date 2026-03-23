@@ -1,7 +1,7 @@
 # Professional Portfolio
 
 ## Project Title
-My Professional Portfolio
+Caetano Leal Professional Portfolio
 
 ## Technologies Used
 - TypeScript
