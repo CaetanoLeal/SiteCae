@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Tron-inspired design system - Deep black with cyan neon */
+    --background: 0 0% 0%;
+    --foreground: 190 100% 80%;
+
+    --card: 0 0% 5%;
+    --card-foreground: 190 100% 80%;
+
+    --popover: 0 0% 5%;
+    --popover-foreground: 190 100% 80%;
+
+    --primary: 190 100% 50%;
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 190 100% 15%;
+    --secondary-foreground: 190 100% 80%;
+
+    --muted: 0 0% 10%;
+    --muted-foreground: 190 50% 50%;
+
+    --accent: 190 100% 50%;
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 190 100% 20%;
+    --input: 0 0% 10%;
+    --ring: 190 100% 50%;
+
+    --radius: 0.5rem;
+
+    /* Custom Tron colors */
+    --neon-cyan: 190 100% 50%;
+    --neon-cyan-bright: 190 100% 60%;
+    --neon-glow: 190 100% 50%;
+    --grid-line: 190 100% 20%;
+    --deep-black: 0 0% 0%;
+    --dark-bg: 0 0% 3%;
+  }
+}
+
+@layer utilities {
+  /* Neon glow effects */
+  .glow-cyan {
+    text-shadow: 0 0 10px hsl(var(--neon-cyan)), 0 0 20px hsl(var(--neon-cyan)), 0 0 30px hsl(var(--neon-cyan));
+  }
+  
+  .glow-cyan-sm {
+    text-shadow: 0 0 5px hsl(var(--neon-cyan)), 0 0 10px hsl(var(--neon-cyan));
+  }
+
+  .box-glow-cyan {
+    box-shadow: 0 0 10px hsl(var(--neon-cyan) / 0.5), 0 0 20px hsl(var(--neon-cyan) / 0.3), 0 0 30px hsl(var(--neon-cyan) / 0.2);
+  }
+
+  .box-glow-cyan-strong {
+    box-shadow: 0 0 15px hsl(var(--neon-cyan) / 0.8), 0 0 30px hsl(var(--neon-cyan) / 0.5), 0 0 45px hsl(var(--neon-cyan) / 0.3);
+  }
+
+  .border-glow {
+    border-color: hsl(var(--neon-cyan));
+    box-shadow: 0 0 10px hsl(var(--neon-cyan) / 0.5), inset 0 0 10px hsl(var(--neon-cyan) / 0.2);
+  }
+
+  /* Animated grid background */
+  .grid-background {
+    background-image: 
+      linear-gradient(hsl(var(--grid-line)) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--grid-line)) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: grid-move 20s linear infinite;
+  }
+
+  @keyframes grid-move {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 50px 50px;
+    }
+  }
+
+  /* Tron line animation */
+  .tron-line {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tron-line::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, hsl(var(--neon-cyan)), transparent);
+    animation: tron-slide 3s linear infinite;
+  }
+
+  @keyframes tron-slide {
+    0% {
+      left: -100%;
+    }
+    100% {
+      left: 100%;
+    }
+  }
+
+  /* Pulse animation for interactive elements */
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 10px hsl(var(--neon-cyan) / 0.5);
+    }
+    50% {
+      box-shadow: 0 0 20px hsl(var(--neon-cyan) / 0.8), 0 0 30px hsl(var(--neon-cyan) / 0.5);
+    }
+  }
+
+  /* Hover glow effect */
+  .hover-glow {
+    transition: all 0.3s ease;
+  }
+
+  .hover-glow:hover {
+    box-shadow: 0 0 15px hsl(var(--neon-cyan) / 0.6), 0 0 30px hsl(var(--neon-cyan) / 0.4);
+    transform: translateY(-2px);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
