@@ -43,9 +43,4 @@ SiteCae/
 - Clean and professional layout
 - Interactive project showcase
 
-## Contact Information
-- Email: example@example.com
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/yourprofile)
-
-## License
 This project is licensed under the MIT License.
