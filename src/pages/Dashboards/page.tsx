@@ -72,9 +72,9 @@ const Dashboards = () => {
   ]);
 
   const [dashboardsList, setDashboardsList] = useState([
-    { id: "atendimentos_bot", title: "Dashboard de Atendimentos (Telegram/WhatsApp)", description: "Métricas de performance de bots, tempo médio de resposta, volume de mensagens por hora e taxa de transição para humano.", image: dashboard3, votosTotais: 0, notaMedia: 0, userRating: 0 },
-    { id: "intelectual", title: "Dashboard Intelectual", description: "Métricas de engajamento escolar, desempenho de turmas e acompanhamento de projetos pedagógicos.", image: dashboard2, votosTotais: 0, notaMedia: 0, userRating: 0 },
-    { id: "faturamento_continente", title: "Faturamento de Empresas por Continente", description: "Visão macroeconômica global corporativa, conversão de moedas em tempo real e distribuição de market share global.", image: dashboard1, votosTotais: 0, notaMedia: 0, userRating: 0 }
+    { id: "atendimentos_bot", title: "Dashboard de Atendimentos (Telegram/WhatsApp)", description: "Criado para análise e coleta de dados dos clientes que usam meu sistema de atendimento, sendo possível ver empresas que mais tem conversão.", image: dashboard3, votosTotais: 0, notaMedia: 0, userRating: 0 },
+    { id: "intelectual", title: "Dashboard Intelectual", description: "criado para análisar o marketing escolar, é possivel analisar qual consultor fez mais receitas e matricula e quais campanhas de marketing foram melhor.", image: dashboard2, votosTotais: 0, notaMedia: 0, userRating: 0 },
+    { id: "faturamento_continente", title: "Faturamento de Empresas por Continente", description: "Criado apartir de uma base de dados com faturamentos de varias empresas, este foi o power bi mais bonito que fiz enquanto fazia curso de dados e que me fez tirar a melhor nota da turma.", image: dashboard1, votosTotais: 0, notaMedia: 0, userRating: 0 }
   ]);
 
   // Carrega todas as informações reais vindas do PostgreSQL no Supabase
@@ -211,7 +211,7 @@ const Dashboards = () => {
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
             <div>
               <h1 className="text-3xl font-bold tracking-tight">Métricas de Interação</h1>
-              <p className="text-muted-foreground text-sm">Dados reais centralizados vindos diretamente do PostgreSQL.</p>
+              <p className="text-muted-foreground text-sm">Dados reais centralizados coletados em tempo real e automaticamente montando os gráficos ao lado. O portfólio de dashboard já começa aqui!</p>
             </div>
             
             <div className="flex items-center gap-3 bg-primary/10 border border-primary/20 px-4 py-2 rounded-xl">
