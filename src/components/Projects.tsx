@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Github } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
+import { useNavigate } from "react-router-dom";
 
 // IMPORT DAS IMAGENS
 import project1 from "@/assets/project1.png";
@@ -10,6 +11,7 @@ import project3 from "@/assets/project3.png";
 import project4 from "@/assets/project4.png";
 import project5 from "@/assets/project5.png";
 import project6 from "@/assets/project6.png";
+import project7 from "@/assets/project7.png";
 
 // 🔥 TIPAGEM MELHORADA (repo opcional)
 type Project = {
@@ -70,10 +72,24 @@ const projects: Project[] = [
     repo: "https://github.com/CaetanoLeal/casamento",
     tags: ["TypeScript", "Supabase", "CSS"],
   },
+  {
+    title: "Dashboards",
+    description: "Veja alguns dos  dashboards e BIs que ja fiz ao longo da carreira.",
+    image: project7,
+    url: "https://site-cae-six.vercel.app/dashboards",
+    tags: ["Power BI", "Excel", "SQL", "Python"],
+  },
 ];
 
 const Projects = () => {
+  const navigate = useNavigate();
+
   const handleProjectClick = (project: Project) => {
+    if (project.title === "Dashboards") {
+      navigate("/dashboards");
+      return;
+    }
+
     if (project.url !== "#") {
       window.open(project.url, "_blank");
     } else if (project.repo) {
