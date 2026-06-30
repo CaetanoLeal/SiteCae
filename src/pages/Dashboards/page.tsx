@@ -24,9 +24,9 @@ import dashboard1 from "@/assets/dashboard1.png";
 import dashboard2 from "@/assets/dashboard2.png";
 import dashboard3 from "@/assets/dashboard3.png";
 
-const dashboardIntelectualUrl = new URL("./verNaWeb/dashboard-intelectual.html", import.meta.url).href;
-const dashboardChatbotUrl = new URL("./verNaWeb/dashboard-chatbot.html", import.meta.url).href;
-const dashboardFaturamentoUrl = new URL("./verNaWeb/dashboard-faturamento-continentes.html", import.meta.url).href;
+const dashboardIntelectualUrl = "/dashboards/verNaWeb/dashboard-intelectual.html";
+const dashboardChatbotUrl = "/dashboards/verNaWeb/dashboard-chatbot.html";
+const dashboardFaturamentoUrl = "/dashboards/verNaWeb/dashboard-faturamento-continentes.html";
 
 const dashboardUrls: Record<string, string> = {
   atendimentos_bot: dashboardChatbotUrl,
@@ -36,11 +36,11 @@ const dashboardUrls: Record<string, string> = {
 
 // URLs dos arquivos para download
 const excelFiles = {
-  intelectual: new URL("./excell/relatorio-intelectual.xlsx", import.meta.url).href,
+  intelectual: "/dashboards/excell/relatorio-intelectual.xlsx",
 };
 
 const powerBiFiles = {
-  faturamento_continente: new URL("./powerbi/relatorio-vendas.pbix", import.meta.url).href,
+  faturamento_continente: "/dashboards/powerbi/relatorio-vendas.pbix",
 };
 
 // Mapa de quais dashboards têm arquivos disponíveis

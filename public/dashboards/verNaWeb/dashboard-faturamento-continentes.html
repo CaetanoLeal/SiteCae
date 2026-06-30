@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard de Vendas — BI Interativo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #0a1628;
+  --bg-panel: #0f2034;
+  --bg-panel-2: #122842;
+  --border-soft: #1e3a56;
+  --border-glow: #2d5577;
+  --text-primary: #f4f8fb;
+  --text-secondary: #9fb4c8;
+  --text-muted: #6f859c;
+  --accent-blue: #3d8bd4;
+  --accent-blue-soft: #5fa8e8;
+  --accent-steel: #5b7f9e;
+  --bar-fill: #38597a;
+  --donut-a: #94a8ba;
+  --donut-b: #4a6884;
+  --font-display: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: radial-gradient(circle at 20% 0%, #0e1f34 0%, #060d18 60%, #050a13 100%);
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  min-height: 100vh;
+  padding: 28px;
+}
+
+.bi-wrap {
+  max-width: 1500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* HEADER */
+.bi-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.bi-title h1 {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.bi-title p {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-top: 4px;
+}
+.reset-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-panel-2);
+  border: 1px solid var(--border-soft);
+  color: var(--text-secondary);
+  padding: 9px 16px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.reset-btn:hover {
+  border-color: var(--accent-blue);
+  color: var(--text-primary);
+  background: #163350;
+}
+.reset-btn svg { flex-shrink: 0; }
+
+/* KPI ROW */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr) 1.6fr;
+  gap: 14px;
+}
+.kpi-card {
+  background: linear-gradient(180deg, var(--bg-panel) 0%, #0c1c2e 100%);
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 0 0 1px rgba(61,139,212,0.03), inset 0 1px 0 rgba(255,255,255,0.02);
+  transition: border-color .15s ease;
+}
+.kpi-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 11px;
+  background: linear-gradient(145deg, #1a3a58, #102338);
+  border: 1px solid var(--border-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-blue-soft);
+  flex-shrink: 0;
+}
+.kpi-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.kpi-value {
+  font-size: 21px;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.kpi-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* DATE CARD */
+.date-card {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  padding: 14px 18px;
+}
+.date-inputs {
+  display: flex;
+  gap: 10px;
+}
+.date-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.date-field label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.date-field input[type="date"] {
+  background: #0a1a2c;
+  border: 1px solid var(--border-soft);
+  border-radius: 7px;
+  color: var(--text-primary);
+  padding: 6px 8px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color-scheme: dark;
+  width: 100%;
+}
+.date-field input[type="date"]:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+}
+
+.range-slider {
+  position: relative;
+  height: 22px;
+  margin-top: 2px;
+}
+.range-track {
+  position: absolute;
+  top: 50%;
+  left: 0; right: 0;
+  height: 4px;
+  background: #163047;
+  border-radius: 4px;
+  transform: translateY(-50%);
+}
+.range-fill {
+  position: absolute;
+  top: 50%;
+  height: 4px;
+  background: var(--accent-blue);
+  border-radius: 4px;
+  transform: translateY(-50%);
+}
+.range-handle {
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--accent-blue);
+  transform: translate(-50%, -50%);
+  cursor: grab;
+  z-index: 2;
+}
+.range-handle:active { cursor: grabbing; }
+
+/* ACTIVE FILTERS BAR */
+.active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 0;
+}
+.active-filters:not(:empty) { min-height: 30px; }
+@keyframes chipIn {
+  from { opacity: 0; transform: scale(0.85) translateY(-4px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.filter-chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: #163a5c;
+  border: 1px solid var(--accent-blue);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 10px 6px 12px;
+  border-radius: 999px;
+  animation: chipIn .25s cubic-bezier(.34,1.56,.64,1) both;
+}
+.filter-chip .chip-x {
+  cursor: pointer;
+  width: 16px; height: 16px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  font-size: 12px;
+  line-height: 1;
+}
+.filter-chip .chip-x:hover { background: rgba(255,255,255,0.25); }
+
+/* MAIN GRID */
+.bi-grid {
+  display: grid;
+  grid-template-columns: 2.1fr 1.3fr;
+  grid-template-rows: auto auto;
+  gap: 16px;
+}
+.panel {
+  background: linear-gradient(180deg, var(--bg-panel) 0%, #0c1c2e 100%);
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  padding: 16px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  min-height: 320px;
+}
+.panel-head h2 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+.panel-body {
+  flex: 1;
+  position: relative;
+  display: flex;
+}
+.panel-line { grid-column: 1; grid-row: 1; }
+.panel-donut { grid-column: 2; grid-row: 1; }
+.panel-bars { grid-column: 1; grid-row: 2; }
+.panel-map { grid-column: 2; grid-row: 2; }
+
+.chart-svg { width: 100%; height: 100%; }
+
+/* LINE CHART */
+.chart-point {
+  cursor: pointer;
+  transition: opacity .25s ease;
+}
+.chart-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  fill: var(--text-secondary);
+  font-weight: 600;
+  transition: opacity .25s ease;
+}
+.axis-label {
+  font-size: 10px;
+  fill: var(--text-muted);
+}
+
+/* DONUT */
+.donut-body {
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  flex-direction: row;
+}
+.donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: all .15s ease;
+}
+.legend-item:hover { background: rgba(255,255,255,0.04); }
+.legend-item:active { transform: scale(0.97); }
+.legend-item { transition: all .15s ease, transform .1s ease; }
+.legend-item.active { border-color: var(--accent-blue); background: rgba(61,139,212,0.12); }
+.legend-item.dimmed { opacity: 0.35; }
+.legend-swatch { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+.legend-text { display: flex; flex-direction: column; }
+.legend-value { font-family: var(--font-mono); font-weight: 700; font-size: 14px; }
+.legend-name { font-size: 11px; color: var(--text-muted); }
+
+.donut-center-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  fill: var(--text-muted);
+}
+
+/* BAR CHART */
+.bar-chart {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  justify-content: center;
+}
+.bar-row {
+  display: grid;
+  grid-template-columns: 130px 1fr 70px;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 3px 4px;
+  border-radius: 6px;
+  transition: background .15s ease, opacity .3s ease;
+}
+.bar-row:hover { background: rgba(255,255,255,0.04); }
+.bar-row:active { transform: scale(0.992); }
+.bar-row { transform-origin: left center; }
+.bar-row.dimmed { opacity: 0.3; }
+.bar-row.active .bar-fill { background: var(--accent-blue); box-shadow: 0 0 10px rgba(61,139,212,0.5); }
+.bar-label {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: right;
+}
+.bar-track {
+  background: #0a1a2c;
+  border-radius: 4px;
+  height: 16px;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  background: var(--bar-fill);
+  border-radius: 4px;
+  transition: width .4s cubic-bezier(.4,0,.2,1), background .15s ease;
+}
+.bar-value {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* MAP */
+.map-body { 
+  align-items: stretch; 
+  justify-content: stretch;
+  position: relative;
+}
+#worldMapWrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#worldMapWrap img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.9;
+  z-index: 1;
+}
+.bubbles-svg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+.map-land { fill: #16314c; stroke: #1f4564; stroke-width: 0.6; }
+.map-bubble {
+  cursor: pointer;
+  transition: opacity .15s ease, filter .15s ease;
+}
+.map-bubble-ring {
+  fill: rgba(160,180,200,0.55);
+  stroke: rgba(220,230,240,0.8);
+  stroke-width: 1.2;
+  transition: fill .25s ease, stroke .25s ease;
+}
+.map-bubble.dimmed { opacity: 0.25; }
+.map-bubble.active .map-bubble-ring {
+  fill: rgba(61,139,212,0.7);
+  stroke: #8fc3f0;
+}
+.map-label {
+  font-size: 10.5px;
+  fill: var(--text-secondary);
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  pointer-events: none;
+}
+.map-ocean-label {
+  font-size: 9.5px;
+  fill: #3f6f93;
+  font-style: italic;
+  pointer-events: none;
+}
+.map-tooltip {
+  position: absolute;
+  background: #0c1f33;
+  border: 1px solid var(--accent-blue);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -110%);
+  transition: opacity .1s ease;
+  white-space: nowrap;
+  z-index: 10;
+}
+.map-tooltip.show { opacity: 1; }
+.map-tooltip b { color: var(--accent-blue-soft); }
+
+/* FOOTER */
+.bi-footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  padding: 10px 0 4px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1100px) {
+  .kpi-row { grid-template-columns: repeat(2, 1fr); }
+  .date-card { grid-column: span 2; }
+  .bi-grid { grid-template-columns: 1fr; }
+  .panel-line, .panel-donut, .panel-bars, .panel-map { grid-column: 1; }
+  .panel-line { grid-row: 1; } .panel-donut { grid-row: 2; }
+  .panel-bars { grid-row: 3; } .panel-map { grid-row: 4; }
+}
+@media (max-width: 600px) {
+  body { padding: 14px; }
+  .kpi-row { grid-template-columns: 1fr 1fr; }
+  .date-card { grid-column: span 2; }
+  .bar-row { grid-template-columns: 90px 1fr 60px; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="bi-wrap">
+
+  <header class="bi-header">
+    <div class="bi-title">
+      <h1>Dashboard de Vendas</h1>
+      <p>Visão geral do desempenho comercial · 2021 – 2023</p>
+    </div>
+    <button id="resetBtn" class="reset-btn" title="Limpar todos os filtros">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+      Limpar filtros
+    </button>
+  </header>
+
+  <!-- KPI ROW -->
+  <section class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9.5a2.5 2.5 0 0 1 2.5-1.5h1a2.2 2.2 0 0 1 0 4.4h-1a2.2 2.2 0 0 0 0 4.4h1a2.5 2.5 0 0 0 2.5-1.5"/></svg>
+      </div>
+      <div class="kpi-text">
+        <span class="kpi-value" id="kpiFaturamento">—</span>
+        <span class="kpi-label">Faturamento Total</span>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M3 17l4 4M21 17l-4 4M9 9h6M9 12.5h3"/></svg>
+      </div>
+      <div class="kpi-text">
+        <span class="kpi-value" id="kpiProdutos">—</span>
+        <span class="kpi-label">Produtos Vendidos</span>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7l9-4 9 4-9 4-9-4Z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg>
+      </div>
+      <div class="kpi-text">
+        <span class="kpi-value" id="kpiTicket">—</span>
+        <span class="kpi-label">Ticket Médio</span>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 11a4 4 0 1 0-8 0"/><circle cx="12" cy="7" r="3.2"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+      </div>
+      <div class="kpi-text">
+        <span class="kpi-value" id="kpiClientes">—</span>
+        <span class="kpi-label">Qtd. Clientes</span>
+      </div>
+    </div>
+
+    <div class="kpi-card date-card">
+      <div class="date-inputs">
+        <div class="date-field">
+          <label for="dateStart">De</label>
+          <input type="date" id="dateStart" />
+        </div>
+        <div class="date-field">
+          <label for="dateEnd">Até</label>
+          <input type="date" id="dateEnd" />
+        </div>
+      </div>
+      <div class="range-slider" id="rangeSlider">
+        <div class="range-track"></div>
+        <div class="range-fill" id="rangeFill"></div>
+        <div class="range-handle" id="handleStart" data-handle="start"></div>
+        <div class="range-handle" id="handleEnd" data-handle="end"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACTIVE FILTERS -->
+  <div class="active-filters" id="activeFilters"></div>
+
+  <!-- MAIN GRID -->
+  <section class="bi-grid">
+
+    <div class="panel panel-line">
+      <div class="panel-head">
+        <h2>Faturamento Total por Ano e Mês</h2>
+      </div>
+      <div class="panel-body">
+        <svg id="lineChart" class="chart-svg" viewBox="0 0 760 300" preserveAspectRatio="none"></svg>
+      </div>
+    </div>
+
+    <div class="panel panel-donut">
+      <div class="panel-head">
+        <h2>Soma de Qtd. Vendida por Gênero</h2>
+      </div>
+      <div class="panel-body donut-body">
+        <svg id="donutChart" class="chart-svg" viewBox="0 0 280 280"></svg>
+        <div class="donut-legend" id="donutLegend"></div>
+      </div>
+    </div>
+
+    <div class="panel panel-bars">
+      <div class="panel-head">
+        <h2>Faturamento Total por Marca</h2>
+      </div>
+      <div class="panel-body">
+        <div id="barChart" class="bar-chart"></div>
+      </div>
+    </div>
+
+    <div class="panel panel-map">
+      <div class="panel-head">
+        <h2>Faturamento Total por Continente</h2>
+      </div>
+      <div class="panel-body map-body">
+        <div id="worldMapWrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/World_map_-_low_resolution.svg/1280px-World_map_-_low_resolution.svg.png" alt="Mapa Mundi" onerror="this.style.display='none'">
+          <svg class="bubbles-svg" id="bubblesSvg" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet"></svg>
+        </div>
+        <div class="map-tooltip" id="mapTooltip"></div>
+      </div>
+    </div>
+
+  </section>
+
+  <footer class="bi-footer">
+    Dados fictícios em respeito a lei de proteção de dados (LGPD)
+  </footer>
+</div>
+
+<script src="./data/app.js"></script>
+</body>
+</html>
